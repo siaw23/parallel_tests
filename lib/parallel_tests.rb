@@ -38,8 +38,12 @@ module ParallelTests
       @pids ||= Pids.new(pid_file_path)
     end
 
+    def randomizer
+      (0...8).map { ('a'..'z').to_a[rand(26)] }.join
+    end
+
     def pid_file_path
-      ENV.fetch('PARALLEL_PID_FILE')
+      ENV.fetch('PARALLEL_PID_FILE', Tempfile.open('parallel_tests-pidfile').path.concat(randomizer))
     end
 
     def stop_all_processes
